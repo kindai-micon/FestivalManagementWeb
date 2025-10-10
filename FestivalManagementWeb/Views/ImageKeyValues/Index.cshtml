@@ -12,37 +12,39 @@
 
 <div class="row">
     <div class="col-md-4">
-        <h4>@(isEditing ? "データの更新" : "新規作成")</h4>
-        <form asp-action="Upsert" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ItemToEdit.Id" />
-            <div class="form-group">
-                <label asp-for="ItemToEdit.Key" class="control-label"></label>
-                <input asp-for="ItemToEdit.Key" class="form-control" />
-                <span asp-validation-for="ItemToEdit.Key" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" class="form-control" type="file" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-
-            @if (isEditing && Model.ItemToEdit.HasImage)
-            {
-                <div class="form-group mt-2">
-                    <label>現在の画像</label>
-                    <img src="@Url.Action("GetImage", "ImageKeyValues", new { id = Model.ItemToEdit.Id })" class="img-fluid" alt="Current Image" />
+        <div style="position: sticky; top: 20px;">
+            <h4>@(isEditing ? "データの更新" : "新規作成")</h4>
+            <form asp-action="Upsert" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="ItemToEdit.Id" />
+                <div class="form-group">
+                    <label asp-for="ItemToEdit.Key" class="control-label"></label>
+                    <input asp-for="ItemToEdit.Key" class="form-control" />
+                    <span asp-validation-for="ItemToEdit.Key" class="text-danger"></span>
                 </div>
-            }
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" class="form-control" type="file" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
 
-            <div class="form-group mt-3">
-                <input type="submit" value="@(isEditing ? "更新" : "作成")" class="btn btn-primary" />
-                @if (isEditing)
+                @if (isEditing && Model.ItemToEdit.HasImage)
                 {
-                    <a asp-action="Index" class="btn btn-secondary">キャンセル</a>
+                    <div class="form-group mt-2">
+                        <label>現在の画像</label>
+                        <img src="@Url.Action("GetImage", "ImageKeyValues", new { id = Model.ItemToEdit.Id })" class="img-fluid" alt="Current Image" />
+                    </div>
                 }
-            </div>
-        </form>
+
+                <div class="form-group mt-3">
+                    <input type="submit" value="@(isEditing ? "更新" : "作成")" class="btn btn-primary" />
+                    @if (isEditing)
+                    {
+                        <a asp-action="Index" class="btn btn-secondary">キャンセル</a>
+                    }
+                </div>
+            </form>
+        </div>
     </div>
     <div class="col-md-8">
         <div class="d-flex justify-content-between align-items-center">
