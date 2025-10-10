@@ -11,8 +11,8 @@
 
 <div class="row">
     <!-- 左サイドバー: 追加フォーム -->
-    <div class="col-xl-2 col-lg-3 col-md-4">
-        <div class="sidebar-forms sticky-top" style="top: 20px;">
+    <div class="col-12 col-md-4 col-lg-3 col-xl-2 mb-4 mb-md-0">
+        <div class="sidebar-forms" style="position: sticky; top: 20px;">
             <!-- テキスト追加フォーム -->
             <div class="card border-primary mb-3">
                 <div class="card-header bg-primary text-white py-2">
@@ -87,7 +87,7 @@
     </div>
 
     <!-- メインコンテンツ: ツリービュー -->
-    <div class="col-xl-10 col-lg-9 col-md-8">
+    <div class="col-12 col-md-8 col-lg-9 col-xl-10">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h4>全データ一覧 <span class="badge bg-secondary">@Model.AllItems.Count()</span></h4>
         </div>
@@ -155,25 +155,25 @@
                                             <div class="tree-item ms-4 mt-2 p-3 border rounded bg-white">
                                                 @if (item is FestivalManagementWeb.Models.TextKeyValue textItem)
                                                 {
-                                                    <div class="mb-2 d-flex justify-content-between align-items-start">
+                                                    <div class="mb-2 d-flex flex-column flex-sm-row justify-content-between align-items-start gap-2">
                                                         <div>
                                                             <span class="badge bg-primary me-2">テキスト</span>
                                                             <span style="font-size: 1em; font-weight: 500;">@textItem.Key</span>
                                                         </div>
-                                                        <div class="btn-group">
+                                                        <div class="btn-group flex-shrink-0">
                                                             <button type="button" class="btn btn-outline-primary btn-sm d-inline-flex align-items-center gap-1" onclick='showTextModal(@Json.Serialize(textItem))' title="編集">
                                                                 <i class="bi bi-pencil"></i>
-                                                                <span>編集</span>
+                                                                <span class="d-none d-sm-inline">編集</span>
                                                             </button>
                                                             <button type="button" class="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1" onclick="confirmDelete('@textItem.Id', 'text', '@textItem.Key')" title="削除">
                                                                 <i class="bi bi-trash"></i>
-                                                                <span>削除</span>
+                                                                <span class="d-none d-sm-inline">削除</span>
                                                             </button>
                                                         </div>
                                                     </div>
                                                     <div class="ps-3 border-start border-3 border-primary">
                                                         <div class="mb-2">
-                                                            <div style="max-width: 100%; white-space: pre-wrap; background-color: #f8f9fa; padding: 8px 12px; border-radius: 4px; font-size: 0.95em;">@textItem.Value</div>
+                                                            <div class="text-value-container">@textItem.Value</div>
                                                         </div>
                                                         <div style="font-size: 0.9em;">
                                                             <span class="me-3">
@@ -195,19 +195,19 @@
                                                 }
                                                 else if (item is FestivalManagementWeb.Models.ImageKeyValue imageItem)
                                                 {
-                                                    <div class="mb-2 d-flex justify-content-between align-items-start">
+                                                    <div class="mb-2 d-flex flex-column flex-sm-row justify-content-between align-items-start gap-2">
                                                         <div>
                                                             <span class="badge bg-success me-2">画像</span>
                                                             <span style="font-size: 1em; font-weight: 500;">@imageItem.Key</span>
                                                         </div>
-                                                        <div class="btn-group">
+                                                        <div class="btn-group flex-shrink-0">
                                                             <button type="button" class="btn btn-outline-success btn-sm d-inline-flex align-items-center gap-1" onclick='showImageModal(@Json.Serialize(imageItem))' title="編集">
                                                                 <i class="bi bi-pencil"></i>
-                                                                <span>編集</span>
+                                                                <span class="d-none d-sm-inline">編集</span>
                                                             </button>
                                                             <button type="button" class="btn btn-outline-danger btn-sm d-inline-flex align-items-center gap-1" onclick="confirmDelete('@imageItem.Id', 'image', '@imageItem.Key')" title="削除">
                                                                 <i class="bi bi-trash"></i>
-                                                                <span>削除</span>
+                                                                <span class="d-none d-sm-inline">削除</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -216,9 +216,8 @@
                                                             @if (imageItem.HasImage)
                                                             {
                                                                 <img src="@Url.Action("GetImage", "ImageKeyValues", new { id = imageItem.Id })"
-                                                                     style="max-width: 250px; max-height: 250px;"
                                                                      alt="@imageItem.Key"
-                                                                     class="img-thumbnail" />
+                                                                     class="img-thumbnail image-preview" />
                                                             }
                                                             else
                                                             {
@@ -355,6 +354,50 @@
 </div>
 
 <style>
+    /* テキスト値のコンテナ - レスポンシブ対応 */
+    .text-value-container {
+        max-width: 100%;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        background-color: #f8f9fa;
+        padding: 8px 12px;
+        border-radius: 4px;
+        font-size: 0.95em;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    /* 画像プレビュー - レスポンシブ対応 */
+    .image-preview {
+        max-width: 100%;
+        max-height: 250px;
+        width: auto;
+        height: auto;
+    }
+
+    @@media (max-width: 576px) {
+        .text-value-container {
+            max-height: 150px;
+            font-size: 0.85em;
+        }
+
+        .image-preview {
+            max-height: 200px;
+        }
+
+        /* 小さい画面ではstickyを無効化 */
+        .sidebar-forms {
+            position: static !important;
+        }
+    }
+
+    /* タブレット以下でstickyを無効化 */
+    @@media (max-width: 767px) {
+        .sidebar-forms {
+            position: static !important;
+        }
+    }
+
     .tree-view {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
